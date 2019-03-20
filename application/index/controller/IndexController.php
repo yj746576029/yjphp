@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yangjie
- * Date: 2019/1/31
- * Time: 16:08
- */
 
 namespace application\index\controller;
-
 
 use framework\Db;
 use framework\Controller;

@@ -1,5 +1,7 @@
 <?php
+
 namespace framework;
+
 class Template {
     private $templatePath=''; //模板路径
     private $data=[];//模板变量

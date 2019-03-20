@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yangjie
- * Date: 2019/1/31
- * Time: 10:56
- */
 
 namespace framework;
 
