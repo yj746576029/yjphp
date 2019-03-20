@@ -10,5 +10,5 @@ function p ($p){
     print_r($p);die;
 }
 define('__ROOT__',__DIR__);
-require __DIR__.'/framework/base.php';
+require __DIR__.'/framework/Base.php';
 (new \framework\Base())->run();

@@ -32,7 +32,7 @@ class Base{
     }
 
     private function autoload($className){
-        require __ROOT__.'/framework/db/Db.php';
+        require __ROOT__.'/framework/Db.php';
         require __ROOT__.'/'.$className.'.php';
     }
 
