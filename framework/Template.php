@@ -29,7 +29,7 @@ class Template {
     public function display($template) {
         extract($this->data);
         ob_start();
-        include $this->templatePath . ($template!=''?:__ACTION__).'.php';      
+        include $this->templatePath . ($template!=''?:__ACTION__).'Template.php';      
         $res = ob_get_contents();
         ob_end_clean();
         echo $res;

@@ -32,7 +32,6 @@ class Base{
     }
 
     private function autoload($className){
-        echo __ROOT__.'/'.$className.'.php'.PHP_E;
         require __ROOT__.'/'.$className.'.php';
     }
 
