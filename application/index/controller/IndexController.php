@@ -19,7 +19,6 @@ class IndexController{
             'name' => '杨杰aa',
             'email' => '杨杰@php.cn'
         ];
-        p($db->table('student')->where(['id'=>13])->delete());
     }
 
 }

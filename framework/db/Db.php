@@ -50,7 +50,7 @@ class Db{
             //配置数据源DSN
             $dsn = "{$config['type']}:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset={$config['charset']}";
             //创建PDO对象
-            $this->con = new \PDO($dsn,$config['username'],$config['password']);
+            $this->con = new \PDO($dsn,$config['username'],$config['password'],[]);
             //设置客户端的默认字符集
             $this->con->query("SET NAMES {$config['charset']}");
         }catch(\PDOException $e){
