@@ -8,7 +8,7 @@ class Controller {
     private $template;
 
     public function __construct(){
-        $this->template = new Template;
+        $this->template = new View();
     }
 
     /**

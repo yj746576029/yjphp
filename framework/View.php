@@ -2,12 +2,12 @@
 
 namespace framework;
 
-class Template {
+class View {
     private $templatePath=''; //模板路径
     private $data=[];//模板变量
 
     public function __construct(){
-        $this->templatePath=__ROOT__.'\\application\\'.__MODULE__.'\\template\\'.__ACTION__.'\\';
+        $this->templatePath=__ROOT__.'\\application\\'.__MODULE__.'\\view\\'.__ACTION__.'\\';
     }
 
     /**
@@ -31,10 +31,8 @@ class Template {
     public function display($template) {
         extract($this->data);
         ob_start();
-        include $this->templatePath . ($template!=''?:__ACTION__).'Template.php';      
-        $res = ob_get_contents();
-        ob_end_clean();
-        echo $res;
+        include $this->templatePath . ($template!=''?:__ACTION__).'View.php';      
+        echo ob_get_clean();
     }
 
 }
