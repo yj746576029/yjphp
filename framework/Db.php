@@ -69,7 +69,22 @@ class Db{
         return self::$instance;
     }
 
-    //完成数据表的写操作:新增,更新,删除
+    //读写分开处理
+    public function querySql($sql){
+        //需要防止sql注入，待优化
+        if(strpos($sql,'SELECT') !== false){
+            return $this->query($sql);
+        }else{
+            return $this->exec($sql);
+        }
+    }
+
+    //数据表的读操作
+    private function query($sql){
+        return $this->con->query($sql);
+    }
+
+    //数据表的写操作:新增,更新,删除
     //返回受影响的记录，如果新增还返回新增主键id
     private function exec($sql){
         $num = $this->con->exec($sql);
@@ -87,11 +102,6 @@ class Db{
             echo '操作失败'.$error[0].':'.$error[1].':'.$error[2];
             return false;
         }
-    }
-
-    //完成数据表的读操作
-    private function query($sql){
-        return $this->con->query($sql);
     }
 
     public function table($tableName){
@@ -155,13 +165,13 @@ class Db{
         return $this;
     }
 
-    public function find(){
+    public function fetch(){
         $this->limit = ' LIMIT 1 ';
         $sql = 'SELECT '.$this->field.' FROM '.$this->tableName.$this->join.$this->where.$this->order.$this->limit;
         return $this->querySql($sql)->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function findAll(){
+    public function fetchAll(){
         $sql = 'SELECT '.$this->field.' FROM '.$this->tableName.$this->join.$this->where.$this->order;
         return $this->querySql($sql)->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -197,12 +207,4 @@ class Db{
         return $this->querySql($sql);
     }
 
-    public function querySql($sql){
-        //需要防止sql注入，待优化
-        if(strpos($sql,'SELECT') !== false){
-            return $this->query($sql);
-        }else{
-            return $this->exec($sql);
-        }
-    }
 }
