@@ -6,68 +6,22 @@ class Model{
 
     protected $db = null;  //数据库连接对象
 
-    protected $tableName; //表名
-    
-    public $field='*';//查询字段
-
-    public $join='';//表连接
-
-    public $where='';//条件
-
-    public $order='';//排序
-    
-    public $limit='';//记录限定
-
-    protected $bindValue=[];//参数绑定
-
-    public $rowCount=null;//影响的行数
-    
-    public $insertId=null;//插入数据的id
-
     public function __construct(){
         // get_called_class() 也可用static::class
         // 把子类名转化成表名
        $str=strrchr(get_called_class(),'\\');
        $str=str_replace('\\','',$str);
        $str=str_replace('Model','',$str);
-       $this->tableName=strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $str));
-       //连接数据库
-       $this->db = Db::connect();
+       $tableName=strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $str));
+       $this->db = Db::connect();//连接数据库
+       $this->db->table($tableName);//自动设置表名
     }
 
     /**
      * where 条件构造
      */
     public function where(array $where=[]){
-        $this->where=count($where)>0?' WHERE':'';
-        foreach ($where as $k=>$v){
-            //判断是否为一维数组
-            if(!is_array($v)){
-                $this->where .= $k == 0 ? " {$k} = :{$k}":" AND {$k} = :{$k}";
-                $this->bindValue[':'.$k]=$v;
-            }else{
-                reset($v);//	将数组的内部指针指向第一个元素
-                $key=key($v);//从当前内部指针位置返回元素键名
-                switch ($key){
-                    case 'in':
-                        $this->where .= $k == 0 ? " {$k} IN (:{$k})":" AND {$k} IN (:{$k})";
-                        $this->bindValue[':'.$k]=$v['in'];
-                        break;
-                    case 'between':
-                        $arr = explode(',',$v['between']);
-                        $this->where .= $k == 0 ? " ( {$k} BETWEEN :{$k}_start AND :{$k}_end )":" AND ( {$k} BETWEEN :{$k}_start AND :{$k}_end )";
-                        $this->bindValue[':'.$k.'_start']=$arr[0];
-                        $this->bindValue[':'.$k.'_end']=$arr[1];
-                        break;
-                    case 'like':
-                        $this->where .= $k == 0 ? " {$k} LIKE :{$k}":" AND {$k} LIKE :{$k}";
-                        $this->bindValue[':'.$k]=$v['like'];
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        $this->db->where($where);
         return $this;
     }
 
@@ -75,7 +29,7 @@ class Model{
      * 字段筛选
      */
     public function field($field){
-        $this->field = $field;
+        $this->db->field($field);
         return $this;
     }
 
@@ -83,14 +37,7 @@ class Model{
      * 表连接
      */
     public function join($tableName,$on,$type='inner'){
-        $t=strtoupper($type);
-        $onArr=explode(',',$on);
-        if(strpos($tableName,',') !== false){
-            $tableNameArr=explode(',',$tableName);
-            $this->join.=' '.$t.' JOIN '.$tableNameArr[0].' AS '.$tableNameArr[1] .' ON '.$onArr[0].' = '.$onArr[1];
-        }else{
-            $this->join.=' '.$t.' JOIN '.$tableName .' ON '.$onArr[0].' = '.$onArr[1];
-        }
+        $this->db->join($tableName,$on,$type);
         return $this;
     }
 
@@ -98,7 +45,7 @@ class Model{
      * 排序
      */
     public function orderBy($order){
-        $this->order = 'ORDER DY '.$order;
+        $this->db->orderBy($order);
         return $this;
     }
 
@@ -106,9 +53,8 @@ class Model{
      * 获取单条数据
      */
     public function fetch(){
-        $this->limit = ' LIMIT 1 ';
-        $sql = 'SELECT '.$this->field.' FROM '.$this->tableName.$this->join.$this->where.$this->order.$this->limit;
-        return $this->db->query($sql,$this->bindValue)->fetch(\PDO::FETCH_ASSOC);
+        $sql = 'SELECT '.$this->db->field.' FROM '.$this->db->tableName.$this->db->join.$this->db->where.$this->db->order.' LIMIT 1';
+        return $this->db->query($sql,$this->db->bindValue)->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -116,7 +62,7 @@ class Model{
      */
     public function fetchAll(){
         $sql = 'SELECT '.$this->field.' FROM '.$this->tableName.$this->join.$this->where.$this->order;
-        return $this->db->query($sql,$this->bindValue)->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->db->query($sql,$this->db->bindValue)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -135,11 +81,14 @@ class Model{
         $column .= ' ) ';
         $value .= ' ) ';
         $sql = 'INSERT INTO '.$this->tableName.$column.' VALUES'.$value;
-        $this->rowCount=$this->db->query($sql,$this->bindValue)->rowCount();
+        $this->rowCount=$this->db->query($sql,$this->db->bindValue)->rowCount();
         $this->insertId = $this->db->lastInsertId();
         return  $this->rowCount!=null? true:false;
     }
 
+    /**
+     * 更新数据
+     */
     public function update($data){
         $str= ' ';
         $i=0;
@@ -149,13 +98,16 @@ class Model{
             ++$i;
         }
         $sql = 'UPDATE '.$this->tableName.' SET' .$str.$this->where;
-        $this->rowCount=$this->db->query($sql,$this->bindValue)->rowCount();
+        $this->rowCount=$this->db->query($sql,$this->db->bindValue)->rowCount();
         return  $this->rowCount!=null? true:false;
     }
 
+    /**
+     * 删除数据
+     */
     public function delete(){
         $sql = 'DELETE FROM '.$this->tableName.$this->where;
-        $this->rowCount=$this->db->query($sql,$this->bindValue)->rowCount();
+        $this->rowCount=$this->db->query($sql,$this->db->bindValue)->rowCount();
         return  $this->rowCount!=null? true:false;
     }
 
