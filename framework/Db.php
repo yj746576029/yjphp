@@ -32,14 +32,14 @@ class Db{
      * 私有化以防止外部实例化
      */
     private function __construct(){
-        $config=$GLOBALS['config']['database'];
+        $database=Config::get('database');
         try{
             //配置数据源DSN
-            $dsn = "{$config['type']}:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset={$config['charset']}";
+            $dsn = "{$database['type']}:host={$database['host']};port={$database['port']};dbname={$database['dbname']};charset={$database['charset']}";
             //创建PDO对象
-            $this->con = new \PDO($dsn,$config['username'],$config['password'],[]);
+            $this->con = new \PDO($dsn,$database['username'],$database['password'],[]);
             //设置客户端的默认字符集
-            $this->con->query("SET NAMES {$config['charset']}");
+            $this->con->query("SET NAMES {$database['charset']}");
         }catch(\PDOException $e){
             die('数据库连接失败'.$e->getMessage());
         }
@@ -66,7 +66,7 @@ class Db{
      * 表名
      */
     public function table($tableName){
-        $prefix=$GLOBALS['config']['database']['prefix'];
+        $prefix=Config::get('database.prefix');
         if(strpos($tableName,',') !== false){
             $arr=explode(',',$tableName);
             $this->tableName=$prefix.$arr[0].' AS '.$arr[1];

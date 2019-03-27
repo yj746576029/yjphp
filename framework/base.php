@@ -5,15 +5,15 @@ namespace framework;
 class Base{
 
     public function run(){
-        $this -> loadConfig();  //加载配置
         $this -> registerAutoLoad(); //注册自动加载
+        $this -> loadConfig();  //加载配置
         $this -> registerError(); //异常处理
         $this -> getRequestParams(); //获取请求参数
         $this -> dispatch();  //请求分发
     }
 
     private function loadConfig(){
-        $GLOBALS['config']=require __ROOT__.'/config.php';
+        Config::load();//加载配置文件
     }
 
     private function registerAutoLoad(){
@@ -48,34 +48,30 @@ class Base{
     /**
      * 获取请求参数
      */
-    private function getRequestParams()
-    {
-        $config = $GLOBALS['config'];
-        if($config['url']['pathinfo']){
+    private function getRequestParams(){    
+        if(Config::get('url.pathinfo')){
 
         }else{
             //当前模块
-            $defaultModule = $GLOBALS['config']['app']['default_module'];
-            $m = isset($_GET['m'])?$_GET['m']:$defaultModule;
-            define('__MODULE__', $m);
+            $m = isset($_GET['m'])?$_GET['m']:Config::get('app.default_module');
             //当前控制器
-            $defaultController = $GLOBALS['config']['app']['default_controller'];
-            $c = isset($_GET['c'])?$_GET['c']:$defaultController;
-            define('__CONTROLLER__', $c);
+            $c = isset($_GET['c'])?$_GET['c']:Config::get('app.default_controller');
             //当前方法
-            $defaultAction = $GLOBALS['config']['app']['default_action'];
-            $a = isset($_GET['a'])?$_GET['a']:$defaultAction;
-            define('__ACTION__', $a);
+            $a = isset($_GET['a'])?$_GET['a']:Config::get('app.default_action');
         }
+        $request=Request::instance();//获取请求类实例
+        $request->module($m);//设置当前模块
+        $request->controller($c);//设置当前控制器
+        $request->action($a);//设置当前方法
     }
 
     private function dispatch(){
         //实例化控制器
-        $controllerName = ucfirst(__CONTROLLER__.'Controller');
-        $class='\application\\'.__MODULE__.'\\controller\\'.$controllerName;
+        $controllerName = ucfirst(Request::instance()->controller().'Controller');
+        $class='\application\\'.Request::instance()->module().'\\controller\\'.$controllerName;
         $controller = new $class();
         //调用当前方法
-        $actionName = __ACTION__.'Action';
+        $actionName = Request::instance()->action().'Action';
         $controller -> $actionName();
     }
 

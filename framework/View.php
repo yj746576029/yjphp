@@ -7,7 +7,7 @@ class View {
     private $data=[];//模板变量
 
     public function __construct(){
-        $this->templatePath=__ROOT__.'\\application\\'.__MODULE__.'\\view\\'.__ACTION__.'\\';
+        $this->templatePath=__ROOT__.'\\application\\'.Request::instance()->module().'\\view\\'.Request::instance()->action().'\\';
     }
 
     /**
@@ -31,7 +31,7 @@ class View {
     public function display($template) {
         extract($this->data);
         ob_start();
-        include $this->templatePath . ($template!=''?:__ACTION__).'View.php';      
+        include $this->templatePath . ($template!=''?:Request::instance()->action()).'View.php';      
         echo ob_get_clean();
     }
 
