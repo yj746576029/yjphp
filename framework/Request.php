@@ -9,6 +9,7 @@ class Request{
     protected static $instance;
 
     protected $method;
+    protected $pathinfo;
 
     /**
      * @var array 当前调度信息
@@ -228,4 +229,29 @@ class Request{
             return true === $action ? $name : strtolower($name);
         }
     }
+
+    // /**
+    //  * 获取当前请求URL的pathinfo信息（含URL后缀）
+    //  * @access public
+    //  * @return string
+    //  */
+    // public function parsePathinfo()
+    // {
+    //     if (is_null($this->pathinfo)) {
+    //         // 分析PATHINFO信息
+    //         if (!isset($_SERVER['PATH_INFO'])) {
+    //             foreach (['ORIG_PATH_INFO', 'REDIRECT_PATH_INFO', 'REDIRECT_URL'] as $type) {
+    //                 if (!empty($_SERVER[$type])) {
+    //                     $_SERVER['PATH_INFO'] = (0 === strpos($_SERVER[$type], $_SERVER['SCRIPT_NAME'])) ?
+    //                     substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         $this->pathinfo = empty($_SERVER['PATH_INFO']) ? '/' : ltrim($_SERVER['PATH_INFO'], '/');
+    //     }
+    //     $arr = explode('/',$this->pathinfo);
+    //     return ['m'=>$arr[0],'c'=>$arr[1],'a'=>$arr[2]];
+    // }
+
 }

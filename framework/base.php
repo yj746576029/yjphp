@@ -49,8 +49,15 @@ class Base{
      * 获取请求参数
      */
     private function getRequestParams(){    
+        $request=Request::instance();//获取请求类实例
         if(Config::get('url.pathinfo')){
-
+            // $arr=$request->parsePathinfo();
+            // //当前模块
+            // $m = isset($arr[0])?$arr[0]:Config::get('app.default_module');
+            // //当前控制器
+            // $c = isset($arr[1])?$arr[1]:Config::get('app.default_controller');
+            // //当前方法
+            // $a = isset($arr[2])?$arr[2]:Config::get('app.default_action');
         }else{
             //当前模块
             $m = isset($_GET['m'])?$_GET['m']:Config::get('app.default_module');
@@ -59,7 +66,7 @@ class Base{
             //当前方法
             $a = isset($_GET['a'])?$_GET['a']:Config::get('app.default_action');
         }
-        $request=Request::instance();//获取请求类实例
+        
         $request->module($m);//设置当前模块
         $request->controller($c);//设置当前控制器
         $request->action($a);//设置当前方法

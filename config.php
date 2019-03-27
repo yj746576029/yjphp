@@ -36,7 +36,7 @@ return [
     // | URL设置
     // +----------------------------------------------------------------------
     'url'=>[
-        'pathinfo'=>false        //开启pathinfo
+        'pathinfo'=>true,        //开启pathinfo
     ]
 
 ];
