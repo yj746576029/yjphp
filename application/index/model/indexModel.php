@@ -4,7 +4,7 @@ namespace application\index\model;
 
 use framework\Model;
 
-class StudentModel extends Model{
+class IndexModel extends Model{
 
 
 }
