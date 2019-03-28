@@ -97,27 +97,25 @@ class Request{
      * 设置获取GET参数
      * @access public
      * @param string|array $name    变量名
-     * @param mixed        $default 默认值
      * @return mixed
      */
-    public function get($name = '', $default = null){
+    public function get($name = ''){
         if (empty($this->get)) {
             $this->get = $_GET;
         }
         if (is_array($name)) {
             return $this->get = array_merge($this->get, $name);
         }
-        return $this->input($this->get, $name, $default);
+        return $this->get;
     }
 
     /**
      * 设置获取POST参数
      * @access public
-     * @param string|array       $name    变量名
-     * @param mixed        $default 默认值
+     * @param string|array $name    变量名
      * @return mixed
      */
-    public function post($name = '', $default = null){
+    public function post($name = ''){
         if (empty($this->post)) {
             $content = $this->input;
             if (empty($_POST) && false !== strpos($this->contentType(), 'application/json')) {
@@ -129,60 +127,24 @@ class Request{
         if (is_array($name)) {
             return $this->post = array_merge($this->post, $name);
         }
-        return $this->input($this->post, $name, $default);
+        return $this->post;
     }
 
     /**
      * 获取request变量
      * @param string|array $name    数据名称
-     * @param string       $default 默认值
      * @return mixed
      */
-    public function request($name = '', $default = null){
+    public function request($name = ''){
         if (empty($this->request)) {
             $this->request = $_REQUEST;
         }
         if (is_array($name)) {
             return $this->request = array_merge($this->request, $name);
         }
-        return $this->input($this->request, $name, $default);
+        return $this->request;
     }
 
-    /**
-     * 获取变量 支持过滤和默认值
-     * @param array        $data    数据源
-     * @param string|false $name    字段名
-     * @param mixed        $default 默认值
-     * @return mixed
-     */
-    public function input($data = [], $name = '', $default = null){
-        if (false === $name) {
-            // 获取原始数据
-            return $data;
-        }
-        $name = (string) $name;
-        if ('' != $name) {
-            // 解析name
-            if (strpos($name, '/')) {
-                list($name, $type) = explode('/', $name);
-            } else {
-                $type = 's';
-            }
-            // 按.拆分成多维数组进行判断
-            foreach (explode('.', $name) as $val) {
-                if (isset($data[$val])) {
-                    $data = $data[$val];
-                } else {
-                    // 无输入数据，返回默认值
-                    return $default;
-                }
-            }
-            if (is_object($data)) {
-                return $data;
-            }
-        }
-        return $data;
-    }
 
     /**
      * 设置或者获取当前的模块名
@@ -230,28 +192,53 @@ class Request{
         }
     }
 
-    // /**
-    //  * 获取当前请求URL的pathinfo信息（含URL后缀）
-    //  * @access public
-    //  * @return string
-    //  */
-    // public function parsePathinfo()
-    // {
-    //     if (is_null($this->pathinfo)) {
-    //         // 分析PATHINFO信息
-    //         if (!isset($_SERVER['PATH_INFO'])) {
-    //             foreach (['ORIG_PATH_INFO', 'REDIRECT_PATH_INFO', 'REDIRECT_URL'] as $type) {
-    //                 if (!empty($_SERVER[$type])) {
-    //                     $_SERVER['PATH_INFO'] = (0 === strpos($_SERVER[$type], $_SERVER['SCRIPT_NAME'])) ?
-    //                     substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //         $this->pathinfo = empty($_SERVER['PATH_INFO']) ? '/' : ltrim($_SERVER['PATH_INFO'], '/');
-    //     }
-    //     $arr = explode('/',$this->pathinfo);
-    //     return ['m'=>$arr[0],'c'=>$arr[1],'a'=>$arr[2]];
-    // }
+    /**
+     * 解析当前请求的URL
+     * @access public
+     * @return string
+     */
+    public function parse(){
+        if(Config::get('url.pathinfo')){
+            if (is_null($this->pathinfo)) {
+                // 分析PATHINFO信息
+                if (!isset($_SERVER['PATH_INFO'])) {
+                    foreach (['ORIG_PATH_INFO', 'REDIRECT_PATH_INFO', 'REDIRECT_URL'] as $type) {
+                        if (!empty($_SERVER[$type])) {
+                            $_SERVER['PATH_INFO'] = (0 === strpos($_SERVER[$type], $_SERVER['SCRIPT_NAME'])) ?
+                            substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
+                            break;
+                        }
+                    }
+                }
+                $this->pathinfo = empty($_SERVER['PATH_INFO']) ? '/' : ltrim($_SERVER['PATH_INFO'], '/');
+            }
+            $arr = explode('/',$this->pathinfo);
+            //当前模块
+            $m = isset($arr[0])&&!empty($arr[0])?$arr[0]:Config::get('app.default_module');
+            //当前控制器
+            $c = isset($arr[1])&&!empty($arr[1])?$arr[1]:Config::get('app.default_controller');
+            //当前方法
+            $a = isset($arr[2])&&!empty($arr[2])?$arr[2]:Config::get('app.default_action');
+            //解析pathinfo里面的参数
+            unset($arr[0]);unset($arr[1]);unset($arr[2]);
+            $arr=array_merge($arr);
+            foreach($arr as $k=>$v){
+                if($k%2 == 0){
+                    $_GET[$v]=isset($arr[$k+1])?$arr[$k+1]:null;
+                    $_REQUEST[$v]=$_GET[$v];
+                }    
+            }
+        }else{
+            //当前模块
+            $m = isset($_GET['m'])&&!empty($_GET['m'])?$_GET['m']:Config::get('app.default_module');
+            //当前控制器
+            $c = isset($_GET['c'])&&!empty($_GET['c'])?$_GET['c']:Config::get('app.default_controller');
+            //当前方法
+            $a = isset($_GET['a'])&&!empty($_GET['a'])?$_GET['a']:Config::get('app.default_action');
+        }
+        $this->module($m);//设置当前模块
+        $this->controller($c);//设置当前控制器
+        $this->action($a);//设置当前方法
+    }
 
 }

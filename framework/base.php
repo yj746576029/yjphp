@@ -8,7 +8,7 @@ class Base{
         $this -> registerAutoLoad(); //注册自动加载
         $this -> loadConfig();  //加载配置
         $this -> registerError(); //异常处理
-        $this -> getRequestParams(); //获取请求参数
+        $this -> requestParse(); //请求解析
         $this -> dispatch();  //请求分发
     }
 
@@ -46,39 +46,20 @@ class Base{
     }
 
     /**
-     * 获取请求参数
+     * 请求解析
      */
-    private function getRequestParams(){    
-        $request=Request::instance();//获取请求类实例
-        if(Config::get('url.pathinfo')){
-            // $arr=$request->parsePathinfo();
-            // //当前模块
-            // $m = isset($arr[0])?$arr[0]:Config::get('app.default_module');
-            // //当前控制器
-            // $c = isset($arr[1])?$arr[1]:Config::get('app.default_controller');
-            // //当前方法
-            // $a = isset($arr[2])?$arr[2]:Config::get('app.default_action');
-        }else{
-            //当前模块
-            $m = isset($_GET['m'])?$_GET['m']:Config::get('app.default_module');
-            //当前控制器
-            $c = isset($_GET['c'])?$_GET['c']:Config::get('app.default_controller');
-            //当前方法
-            $a = isset($_GET['a'])?$_GET['a']:Config::get('app.default_action');
-        }
-        
-        $request->module($m);//设置当前模块
-        $request->controller($c);//设置当前控制器
-        $request->action($a);//设置当前方法
+    private function requestParse(){    
+        Request::instance()->parse();
     }
 
     private function dispatch(){
+        $request=Request::instance();
         //实例化控制器
-        $controllerName = ucfirst(Request::instance()->controller().'Controller');
-        $class='\application\\'.Request::instance()->module().'\\controller\\'.$controllerName;
+        $controllerName = ucfirst($request->controller().'Controller');
+        $class='\application\\'.$request->module().'\\controller\\'.$controllerName;
         $controller = new $class();
         //调用当前方法
-        $actionName = Request::instance()->action().'Action';
+        $actionName = $request->action().'Action';
         $controller -> $actionName();
     }
 
