@@ -26,6 +26,7 @@ www  WEB部署目录（或者子目录）
 ├─runtime               应用的运行时目录（可写，可定制）
 ├─vendor                第三方类库目录（Composer依赖库）
 ├─config.php            配置文件
+├─function.php          函数文件
 ├─index.php             入口文件
 ├─composer.json         composer 定义文件
 ├─README.md             README 文件
