@@ -7,7 +7,7 @@ class View {
     private $data=[];//模板变量
 
     public function __construct(){
-        $this->templatePath=__ROOT__.'\\application\\'.Request::instance()->module().'\\view\\'.Request::instance()->action().'\\';
+        $this->templatePath=ROOT.'\\application\\'.Request::instance()->module().'\\view\\'.Request::instance()->action().'\\';
     }
 
     /**

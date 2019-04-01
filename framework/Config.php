@@ -14,7 +14,7 @@ class Config {
      * @return mixed
      */
     public static function load(){
-        $file=__ROOT__.'/'.'config.php';
+        $file=ROOT.'/'.'config.php';
         if (is_file($file)) {
             return self::set(include $file);
         }

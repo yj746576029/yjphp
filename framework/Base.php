@@ -7,6 +7,8 @@ class Base{
     public function run(){
         $this -> registerAutoLoad(); //注册自动加载
         $this -> loadConfig();  //加载配置
+        $this -> loadFunction(); //加载函数文件
+        $this -> loadComposer(); //加载composer包
         $this -> registerError(); //异常处理
         $this -> requestParse(); //请求解析
         $this -> dispatch();  //请求分发
@@ -14,6 +16,13 @@ class Base{
 
     private function loadConfig(){
         Config::load();//加载配置文件
+    }
+    
+    private function loadFunction(){
+        require ROOT.'/function.php';//加载函数文件
+    }
+    private function loadComposer(){
+        // require ROOT.'/vendor/autoload.php';//加载composer包
     }
 
     private function registerAutoLoad(){
@@ -27,7 +36,7 @@ class Base{
     }
 
     private function autoload($className){
-        require __ROOT__.'/'.$className.'.php';
+        require ROOT.'/'.$className.'.php';
     }
 
     public function appError($errno, $errstr, $errfile, $errline){
