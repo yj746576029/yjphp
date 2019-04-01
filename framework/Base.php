@@ -22,7 +22,10 @@ class Base{
         require ROOT.'/function.php';//加载函数文件
     }
     private function loadComposer(){
-        // require ROOT.'/vendor/autoload.php';//加载composer包
+        $file = ROOT.'/vendor/autoload.php';
+        if(file_exists($file)){
+            require $file;//加载composer包
+        }  
     }
 
     private function registerAutoLoad(){
