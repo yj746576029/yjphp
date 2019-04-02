@@ -16,7 +16,7 @@ www  WEB部署目录（或者子目录）
 ├─framework             框架系统目录
 │  ├─Base.php           基础类
 │  ├─Config.php         配置类
-│  ├─Dontroller.php     控制器类
+│  ├─Controller.php     控制器类
 │  ├─Db.php             数据库类
 │  ├─Model.php          模型类
 │  ├─Request.php        请求类
