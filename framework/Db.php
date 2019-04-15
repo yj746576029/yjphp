@@ -67,7 +67,7 @@ class Db{
      */
     public function table($tableName){
         $prefix=Config::get('database.prefix');
-        if(strpos($tableName,',') !== false){
+        if(hasStr($tableName,',')){
             $arr=explode(',',$tableName);
             $this->tableName=$prefix.$arr[0].' AS '.$arr[1];
         }else{

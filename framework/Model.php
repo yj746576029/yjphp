@@ -61,7 +61,7 @@ class Model{
      * 获取多条数据
      */
     public function fetchAll(){
-        $sql = 'SELECT '.$this->field.' FROM '.$this->tableName.$this->join.$this->where.$this->order;
+        $sql = 'SELECT '.$this->db->field.' FROM '.$this->db->tableName.$this->join.$this->db->where.$this->db->order;
         return $this->db->query($sql,$this->db->bindValue)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
@@ -94,10 +94,10 @@ class Model{
         $i=0;
         foreach($data as $k=>$v){
             $str.=$i==0?$k.' = :'.$k:','.$k.' = :'.$k;
-            $this->bindValue[':'.$k]=$v;
+            $this->db->bindValue[':'.$k]=$v;
             ++$i;
         }
-        $sql = 'UPDATE '.$this->tableName.' SET' .$str.$this->where;
+        $sql = 'UPDATE '.$this->db->tableName.' SET' .$str.$this->db->where;
         $this->rowCount=$this->db->query($sql,$this->db->bindValue)->rowCount();
         return  $this->rowCount!=null? true:false;
     }
@@ -106,7 +106,7 @@ class Model{
      * 删除数据
      */
     public function delete(){
-        $sql = 'DELETE FROM '.$this->tableName.$this->where;
+        $sql = 'DELETE FROM '.$this->db->tableName.$this->db->where;
         $this->rowCount=$this->db->query($sql,$this->db->bindValue)->rowCount();
         return  $this->rowCount!=null? true:false;
     }

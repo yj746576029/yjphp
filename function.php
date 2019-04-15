@@ -58,3 +58,15 @@ function unserializer($value) {
 		return $result;
 	}
 }
+
+/**
+ * 判断字符串中是否含有某个字符串
+ */
+function hasStr($haystack,$needle)
+{
+	if(strpos($haystack,$needle) === false){
+		return false;
+	}else{
+		return true;
+	}
+}
