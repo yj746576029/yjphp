@@ -2,19 +2,22 @@
 
 namespace framework;
 
-class Controller {
+class Controller
+{
 
     //模板实例
     private $template;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->template = new View();
     }
 
     /**
      * 渲染内容输出
      */
-    protected function display($template=''){
+    protected function display($template = '')
+    {
         $this->template->display($template);
     }
 
@@ -25,7 +28,8 @@ class Controller {
      * @param  mixed $value 变量的值
      * @return $this
      */
-    protected function assign($name, $value = ''){
+    protected function assign($name, $value = '')
+    {
         $this->template->assign($name, $value);
     }
-}    
+}

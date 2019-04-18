@@ -2,12 +2,14 @@
 
 namespace framework;
 
-class View {
-    private $templatePath=''; //模板路径
-    private $data=[];//模板变量
+class View
+{
+    private $templatePath = ''; //模板路径
+    private $data = []; //模板变量
 
-    public function __construct(){
-        $this->templatePath=ROOT.'\\application\\'.Request::instance()->module().'\\view\\'.Request::instance()->action().'\\';
+    public function __construct()
+    {
+        $this->templatePath = ROOT . '\\application\\' . Request::instance()->module() . '\\view\\' . Request::instance()->action() . '\\';
     }
 
     /**
@@ -15,10 +17,11 @@ class View {
      * @param $key string | array
      * @param $value
      */
-    public function assign($key, $value) {
-        if(is_array($key)) {
+    public function assign($key, $value)
+    {
+        if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
-        } elseif(is_string($key)) {
+        } elseif (is_string($key)) {
             $this->data[$key] = $value;
         }
     }
@@ -28,11 +31,11 @@ class View {
      * @param $template
      * @return string
      */
-    public function display($template) {
+    public function display($template)
+    {
         extract($this->data);
         ob_start();
-        include $this->templatePath . ($template!=''?:Request::instance()->action()).'View.php';      
+        include $this->templatePath . ($template != '' ?: Request::instance()->action()) . 'View.php';
         echo ob_get_clean();
     }
-
 }

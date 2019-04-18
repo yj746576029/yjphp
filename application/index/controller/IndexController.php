@@ -3,18 +3,17 @@
 namespace application\index\controller;
 
 use framework\Controller;
-use application\index\model\IndexModel;
 use framework\Db;
+use application\index\model\DemoModel;
 
-class IndexController extends Controller{
+class IndexController extends Controller
+{
 
-    public function indexAction(){
-        // $model=new IndexModel();
-        // dump($model->where(['id'=>1])->fetch());
-        dump(Db::connect()->table('`index`')->where(['id'=>1])->field('`index`,id')->fetch());
-
-        $this->assign('title','Welcome to yjphp !');
+    public function indexAction()
+    {
+        // dump(Db::connect()->table('demo')->where(['name'=>['like'=>'%张三%']])->fetchAll());
+        // dump((new DemoModel())->where(['id' =>1])->fetch());
+        $this->assign('title', 'Welcome to yjphp !');
         $this->display();
     }
-
 }

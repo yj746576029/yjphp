@@ -2,7 +2,8 @@
 
 namespace framework;
 
-class Config {
+class Config
+{
     /**
      * @var array 配置参数
      */
@@ -13,8 +14,9 @@ class Config {
      * @access public
      * @return mixed
      */
-    public static function load(){
-        $file=ROOT.'/'.'config.php';
+    public static function load()
+    {
+        $file = ROOT . '/' . 'config.php';
         if (is_file($file)) {
             return self::set(include $file);
         }
@@ -28,7 +30,8 @@ class Config {
      * @param  mixed        $value 配置值
      * @return mixed
      */
-    public static function set($name='', $value = null){
+    public static function set($name = '', $value = null)
+    {
 
         // 字符串则表示单个配置设置
         if (is_string($name)) {
@@ -47,14 +50,14 @@ class Config {
         if (is_array($name)) {
             if (!empty($value)) {
                 self::$config[$value] = isset(self::$config[$value]) ?
-                    array_merge(self::$config[$value], $name) :
-                    $name;
+                    array_merge(self::$config[$value], $name) : $name;
 
                 return self::$config[$value];
             }
 
             return self::$config = array_merge(
-                self::$config, array_change_key_case($name)
+                self::$config,
+                array_change_key_case($name)
             );
         }
 
@@ -89,8 +92,6 @@ class Config {
         $name[0] = strtolower($name[0]);
 
         return isset(self::$config[$name[0]][$name[1]]) ?
-            self::$config[$name[0]][$name[1]] :
-            null;
+            self::$config[$name[0]][$name[1]] : null;
     }
-
 }
