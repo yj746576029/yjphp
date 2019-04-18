@@ -2,7 +2,7 @@
 
 namespace framework;
 
-class Controller
+abstract class Controller
 {
 
     //模板实例
