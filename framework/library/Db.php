@@ -70,7 +70,7 @@ class Db
     public function table($tableName)
     {
         $prefix = Config::get('database.prefix');
-        if (hasStr($tableName, ' ')) {
+        if (has_str($tableName, ' ')) {
             $arr = explode(' ', $tableName);
             $this->tableName = '`' . $prefix . $arr[0] . '` AS `' . $arr[1] . '`';
         } else {
@@ -92,7 +92,7 @@ class Db
             foreach ($where as $k => $v) {
                 //判断是否为一维数组
                 if (!is_array($v)) {
-                    if (hasStr($k, '.')) {
+                    if (has_str($k, '.')) {
                         $arr = explode('.', $k);
                         $condition = " `{$arr[0]}`.`{$arr[1]}` = :{$arr[1]}";
                         $this->bindValue[':' . $arr[1]] = $v;
@@ -106,7 +106,7 @@ class Db
                     switch ($key) {
                         case 'in':
                             $iArr = explode(',', $v['in']);
-                            if (hasStr($k, '.')) {
+                            if (has_str($k, '.')) {
                                 $arr = explode('.', $k);
                                 $condition = " `{$arr[0]}`.`{$arr[1]}` IN (";
                                 foreach ($iArr as $ik => $iv) {
@@ -125,7 +125,7 @@ class Db
                             break;
                         case 'between':
                             $bArr = explode(',', $v['between']);
-                            if (hasStr($k, '.')) {
+                            if (has_str($k, '.')) {
                                 $arr = explode('.', $k);
                                 $condition .= " ( `{$arr[0]}`.`{$arr[1]}` BETWEEN :{$arr[1]}_start AND :{$arr[1]}_end )";
                                 $this->bindValue[':' . $arr[1] . '_start'] = $bArr[0];
@@ -137,7 +137,7 @@ class Db
                             }
                             break;
                         case 'like':
-                            if (hasStr($k, '.')) {
+                            if (has_str($k, '.')) {
                                 $arr = explode('.', $k);
                                 $condition .= " `{$arr[0]}`.`{$arr[1]}` LIKE :{$arr[1]}";
                                 $this->bindValue[':' . $arr[1]] = $v['like'];

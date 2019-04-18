@@ -86,11 +86,11 @@ if (!function_exists('unserialize')) {
 	}
 }
 
-if (!function_exists('hasStr')) {
+if (!function_exists('has_str')) {
 	/**
 	 * 判断字符串中是否含有某个字符串
 	 */
-	function hasStr($haystack, $needle)
+	function has_str($haystack, $needle)
 	{
 		if (strpos($haystack, $needle) === false) {
 			return false;
