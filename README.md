@@ -14,19 +14,22 @@ www  WEB部署目录（或者子目录）
 │     └─view            视图目录
 │
 ├─framework             框架系统目录
-│  ├─Base.php           基础类
-│  ├─Config.php         配置类
-│  ├─Controller.php     控制器类
-│  ├─Db.php             数据库类
-│  ├─Model.php          模型类
-│  ├─Request.php        请求类
-│  └─View.php           视图类
+│  ├─library            底层类库
+│  │  ├─Base.php        基础类
+│  │  ├─Config.php      配置类
+│  │  ├─Controller.php  控制器类
+│  │  ├─Db.php          数据库类
+│  │  ├─Model.php       模型类
+│  │  ├─Request.php     请求类
+│  │  └─View.php        视图类
+│  │
+│  ├─start.php          引导文件
+│  └─helper.php         助手函数
 │
 ├─statics               静态文件目录（css，js，image）
 ├─runtime               应用的运行时目录（可写，可定制）
 ├─vendor                第三方类库目录（Composer依赖库）
 ├─config.php            配置文件
-├─function.php          函数文件
 ├─index.php             入口文件
 ├─composer.json         composer 定义文件
 ├─README.md             README 文件
