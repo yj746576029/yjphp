@@ -1,4 +1,4 @@
 <?php
 define('ROOT', __DIR__);
-require __DIR__ . '/framework/Base.php';
-(new \framework\Base())->run();
+// 加载框架引导文件
+require ROOT . '/framework/start.php';
