@@ -80,7 +80,7 @@ class Db
     }
 
     /**
-     * where 条件构造['a.id'=>1]['a.id'=>['']]
+     * where 条件构造
      */
     public function where(array $where = [])
     {
