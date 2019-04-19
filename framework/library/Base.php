@@ -7,11 +7,11 @@ class Base
 
     public function run()
     {
+        $this->registerError(); //注册异常处理
         $this->registerAutoLoad(); //注册自动加载
         $this->loadConfig();  //加载配置
         $this->loadHelper(); //加载函数文件
         $this->loadComposer(); //加载composer包
-        $this->registerError(); //异常处理
         $this->requestParse(); //请求解析
         $this->dispatch();  //请求分发
     }
