@@ -5,30 +5,28 @@ namespace framework\library;
 class Request
 {
     /**
-     * @var object 对象实例
+     * 对象实例
      */
     protected static $instance;
 
-    protected $method;
-    protected $pathinfo;
-
     /**
-     * @var array 当前调度信息
+     * 当前调度信息
      */
     protected $module;
     protected $controller;
     protected $action;
 
     /**
-     * @var array 请求参数
+     * 请求参数
      */
     protected $get     = [];
     protected $post    = [];
     protected $request = [];
+    protected $method;
+    protected $pathinfo;
 
     /**
      * 构造函数(防止外部实例化)
-     * @access private
      */
     private function __construct()
     { }
@@ -41,9 +39,6 @@ class Request
 
     /**
      * 初始化
-     * @access public
-     * @param array $options 参数
-     * @return \think\Request
      */
     public static function instance()
     {
@@ -55,9 +50,6 @@ class Request
 
     /**
      * 当前的请求类型
-     * @access public
-     * @param bool $method true 获取原始请求类型
-     * @return string
      */
     public function method()
     {
@@ -71,8 +63,6 @@ class Request
 
     /**
      * 是否为GET请求
-     * @access public
-     * @return bool
      */
     public function isGet()
     {
@@ -81,8 +71,6 @@ class Request
 
     /**
      * 是否为POST请求
-     * @access public
-     * @return bool
      */
     public function isPost()
     {
@@ -91,8 +79,6 @@ class Request
 
     /**
      * 当前是否Ajax请求
-     * @access public
-     * @return bool
      */
     public function isAjax()
     {
@@ -103,9 +89,7 @@ class Request
 
     /**
      * 设置获取GET参数
-     * @access public
      * @param string|array $name    变量名
-     * @return mixed
      */
     public function get($name = '')
     {
@@ -120,9 +104,7 @@ class Request
 
     /**
      * 设置获取POST参数
-     * @access public
      * @param string|array $name    变量名
-     * @return mixed
      */
     public function post($name = '')
     {
@@ -143,7 +125,6 @@ class Request
     /**
      * 获取request变量
      * @param string|array $name    数据名称
-     * @return mixed
      */
     public function request($name = '')
     {
@@ -159,9 +140,7 @@ class Request
 
     /**
      * 设置或者获取当前的模块名
-     * @access public
      * @param string $module 模块名
-     * @return string|Request
      */
     public function module($module = null)
     {
@@ -175,9 +154,7 @@ class Request
 
     /**
      * 设置或者获取当前的控制器名
-     * @access public
      * @param string $controller 控制器名
-     * @return string|Request
      */
     public function controller($controller = null)
     {
@@ -191,9 +168,7 @@ class Request
 
     /**
      * 设置或者获取当前的操作名
-     * @access public
      * @param string $action 操作名
-     * @return string|Request
      */
     public function action($action = null)
     {
@@ -208,8 +183,6 @@ class Request
 
     /**
      * 解析当前请求的URL
-     * @access public
-     * @return string
      */
     public function parse()
     {

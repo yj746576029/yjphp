@@ -25,6 +25,7 @@ class Base
     {
         require ROOT . '/framework/helper.php'; //加载函数文件
     }
+
     private function loadComposer()
     {
         $file = ROOT . '/vendor/autoload.php';
@@ -37,6 +38,7 @@ class Base
     {
         spl_autoload_register([$this, 'autoload']);
     }
+    
     private function registerError()
     {
         error_reporting(E_ALL); // 报告所有错误
