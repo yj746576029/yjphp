@@ -12,7 +12,7 @@ if (!function_exists('dump')) {
 	}
 }
 
-if (!function_exists('dump')) {
+if (!function_exists('halt')) {
 	/**
 	 * 调试输出（有断点）
 	 */
