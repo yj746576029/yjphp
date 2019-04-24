@@ -7,11 +7,11 @@ class Base
 
     public function run()
     {
+        $this->registerError(); //注册异常处理
         $this->registerAutoLoad(); //注册自动加载
         $this->loadConfig();  //加载配置
-        $this->loadHelper(); //加载函数文件
+        $this->loadHelper(); //加载助手函数文件
         $this->loadComposer(); //加载composer包
-        $this->registerError(); //异常处理
         $this->requestParse(); //请求解析
         $this->dispatch();  //请求分发
     }
@@ -25,6 +25,7 @@ class Base
     {
         require ROOT . '/framework/helper.php'; //加载函数文件
     }
+
     private function loadComposer()
     {
         $file = ROOT . '/vendor/autoload.php';
@@ -37,6 +38,7 @@ class Base
     {
         spl_autoload_register([$this, 'autoload']);
     }
+    
     private function registerError()
     {
         error_reporting(E_ALL); // 报告所有错误

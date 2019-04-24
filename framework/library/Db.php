@@ -27,7 +27,6 @@ class Db
 
     public $insertId = null; //插入数据的id
 
-
     /**
      * Db 构造方法
      * 私有化以防止外部实例化
@@ -80,7 +79,7 @@ class Db
     }
 
     /**
-     * where 条件构造['a.id'=>1]['a.id'=>['']]
+     * where 条件构造
      */
     public function where(array $where = [])
     {
@@ -155,7 +154,6 @@ class Db
                 ++$i;
             }
         }
-
         return $this;
     }
 
