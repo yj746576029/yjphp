@@ -40,7 +40,7 @@ class View
             $flag = substr($match, 1, 1);
             switch ($flag) {
                 case '$':
-                    $str = '<?php echo ' . $matches[1][$k] . ' ; ?>';
+                    $str = '<?php echo ' . $matches[1][$k] . ';?>';
                     break;
                 case 'l':
                     $arr = explode(' ', $matches[1][$k]);
@@ -66,6 +66,12 @@ class View
             }
             $newContent = str_replace($match, $str, $newContent);
         }
+        /* 去除html空格与换行 */
+        $find    = ['~>\s+<~', '~>(\s+\n|\r)~'];
+        $replace = ['><', '>'];
+        $newContent = preg_replace($find, $replace, $newContent);
+        // 优化生成的php代码
+        $newContent = preg_replace('/\?>\s*<\?php\s(?!echo\b)/s', '', $newContent);
         return $newContent;
     }
 
