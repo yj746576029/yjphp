@@ -173,8 +173,8 @@ class Db
     {
         $t = strtoupper($type);
         $onArr = explode(',', $on);
-        if (strpos($tableName, ',') !== false) {
-            $tableNameArr = explode(',', $tableName);
+        if (has_str($tableName, ' ')) {
+            $tableNameArr = explode(' ', $tableName);
             $this->join .= ' ' . $t . ' JOIN ' . $tableNameArr[0] . ' AS ' . $tableNameArr[1] . ' ON ' . $onArr[0] . ' = ' . $onArr[1];
         } else {
             $this->join .= ' ' . $t . ' JOIN ' . $tableName . ' ON ' . $onArr[0] . ' = ' . $onArr[1];

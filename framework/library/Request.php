@@ -88,7 +88,7 @@ class Request
     }
 
     /**
-     * 设置获取GET参数
+     * 设置或者获取GET参数
      * @param string|array $name    变量名
      */
     public function get($name = '')
@@ -103,7 +103,7 @@ class Request
     }
 
     /**
-     * 设置获取POST参数
+     * 设置或者获取POST参数
      * @param string|array $name    变量名
      */
     public function post($name = '')
@@ -123,7 +123,7 @@ class Request
     }
 
     /**
-     * 获取request变量
+     * 设置或者获取request变量
      * @param string|array $name    数据名称
      */
     public function request($name = '')

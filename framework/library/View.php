@@ -62,6 +62,7 @@ class View
                     $str = '<?php } ?>';
                     break;
                 default:
+                    $str = '<?php echo ' . $matches[1][$k] . ';?>';
                     break;
             }
             $newContent = str_replace($match, $str, $newContent);

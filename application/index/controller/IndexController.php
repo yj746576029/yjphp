@@ -13,7 +13,7 @@ class IndexController extends Controller
     {
         // dump(Db::connect()->table('demo')->where(['name'=>['like'=>'%张三%']])->fetchAll());
         // dump((new DemoModel())->where(['id' =>1])->fetch());
-        $this->assign(['title'=>'Welcome to yjphp']);
+        $this->assign(['title' => 'Welcome to yjphp']);
         $this->view();
     }
 }
