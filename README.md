@@ -317,6 +317,55 @@ $db->table('table')->where(['id'=>1])->delete();
     </body>
     </html>
 ```
-*   if标签：{if ($a==1)} {elseif ($a==2)} {else} {/if}
-*   loop标签：{loop $list $k $v} {/loop}
-*   标签中直接使用php函数：{strlen($a)}
+*   if标签：
+```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>yjphp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>{$title}</h1>
+        {if ($a==1)}
+        <span>$a==1</span>
+        {elseif ($a==2)}
+        <span>$a==2</span>
+        {else}
+        <span>$a=3</span>
+        {/if}
+    </body>
+    </html>
+```
+*   loop标签：
+```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>yjphp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>{$title}</h1>
+        {loop $list $k $v}
+        <span>{$v}</span>
+        {/loop}
+    </body>
+    </html>
+```
+*   标签中直接使用php函数：
+```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>yjphp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>{$title}</h1>
+        <span>今天是：{date('Y-m-d')}</span>
+    </body>
+```    
