@@ -368,4 +368,5 @@ $db->table('table')->where(['id'=>1])->delete();
         <h1>{$title}</h1>
         <span>今天是：{date('Y-m-d')}</span>
     </body>
+    </html>
 ```    
