@@ -2,7 +2,7 @@
 
 namespace application\index\model;
 
-use framework\Model;
+use framework\library\Model;
 
 class DemoModel extends Model
 { }

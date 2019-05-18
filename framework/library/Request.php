@@ -82,9 +82,11 @@ class Request
      */
     public function isAjax()
     {
-        $value  = $this->server('HTTP_X_REQUESTED_WITH', '', 'strtolower');
-        $result = ('xmlhttprequest' == $value) ? true : false;
-        return $result;
+        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){ 
+            return true; 
+        }else{ 
+            return false;
+        };
     }
 
     /**
@@ -109,12 +111,7 @@ class Request
     public function post($name = '')
     {
         if (empty($this->post)) {
-            $content = $this->input;
-            if (empty($_POST) && false !== strpos($this->contentType(), 'application/json')) {
-                $this->post = (array)json_decode($content, true);
-            } else {
-                $this->post = $_POST;
-            }
+            $this->post = $_POST;
         }
         if (is_array($name)) {
             return $this->post = array_merge($this->post, $name);
@@ -172,12 +169,11 @@ class Request
      */
     public function action($action = null)
     {
-        if (!is_null($action) && !is_bool($action)) {
+        if (!is_null($action)) {
             $this->action = $action;
             return $this;
         } else {
-            $name = $this->action ?: '';
-            return true === $action ? $name : strtolower($name);
+            return $this->action ?: '';;
         }
     }
 

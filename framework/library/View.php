@@ -62,7 +62,13 @@ class View
                     $str = '<?php } ?>';
                     break;
                 default:
-                    $str = '<?php echo ' . $matches[1][$k] . ';?>';
+                    if(has_str($matches[1][$k],'(')&&has_str($matches[1][$k],')')){
+                        //解析php函数,如{count($array)}
+                        $str = '<?php echo ' . $matches[1][$k] . ';?>';
+                    }else{
+                        //如果不是php函数则原样输出
+                        $str ='{'. $matches[1][$k] .'}';
+                    }
                     break;
             }
             $newContent = str_replace($match, $str, $newContent);
