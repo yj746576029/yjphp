@@ -103,61 +103,86 @@ if (!function_exists('has_str')) {
 
 if (!function_exists('session')) {
 	/**
-	 * 判断字符串中是否含有某个字符串
+	 * session函数
 	 */
-	function session($name, $value='')
+	function session($name, $value = '')
 	{
-		if(session_status() !== PHP_SESSION_ACTIVE){
+		if (session_status() !== PHP_SESSION_ACTIVE) {
 			session_start();
 		}
 		if (is_array($name)) {
 			// 数组
-			foreach ($name as $k => $v) { 
-				$_SESSION[$k]=$v;
+			foreach ($name as $k => $v) {
+				$_SESSION[$k] = $v;
 			}
 		} elseif ('' === $value) {
 			// 获取
-			return isset($_SESSION[$name])?$_SESSION[$name]:false;
+			$arr = explode('.', $name);
+			$length = count($arr);
+			$session = '';
+			if ($length > 3) {
+				throw new \Exception('session()函数取值最多支持3维');
+			} elseif ($length == 3) {
+				$session = isset($_SESSION[$arr[0]][$arr[1]][$arr[2]]) ? $_SESSION[$arr[0]][$arr[1]][$arr[2]] : false;
+			} elseif ($length == 2) {
+				$session = isset($_SESSION[$arr[0]][$arr[1]]) ? $_SESSION[$arr[0]][$arr[1]] : false;
+			} elseif ($length == 1) {
+				$session = isset($_SESSION[$arr[0]]) ? $_SESSION[$arr[0]] : false;
+			}
+			return $session;
 		} elseif (is_null($value)) {
 			// 删除
 			unset($_SESSION[$name]);
 		} else {
 			// 设置
-			$_SESSION[$name]=$value;
+			$arr = explode('.', $name);
+			$length = count($arr);
+			$session = '';
+			if ($length > 3) {
+				throw new \Exception('session()函数设置最多支持3维');
+			} elseif ($length == 3) {
+				$_SESSION[$arr[0]][$arr[1]][$arr[2]] = $value;
+			} elseif ($length == 2) {
+				$_SESSION[$arr[0]][$arr[1]] = $value;
+			} elseif ($length == 1) {
+				$_SESSION[$arr[0]] = $value;
+			}
 		}
 	}
 }
 
 if (!function_exists('is_https')) {
 	/**
-     * PHP判断当前协议是否为HTTPS
-     */
-    function is_https() {
-        if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
-            return true;
-        } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
-            return true;
-        } elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
-            return true;
-        }
-        return false;
-    }
+	 * PHP判断当前协议是否为HTTPS
+	 */
+	function is_https()
+	{
+		if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+			return true;
+		} elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+			return true;
+		} elseif (!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+			return true;
+		}
+		return false;
+	}
 }
 
 if (!function_exists('url')) {
 	/**
-     * 构建url
-     */
-    function url($param) {
-		$arr=explode('/',$param);
-		if(count($arr)!=3){
+	 * 构建url
+	 */
+	function url($param)
+	{
+		$arr = explode('/', $param);
+		if (count($arr) != 3) {
 			throw new \Exception('url格式不正确,格式必须为：module_name/controller_name/action_name');
 		}
-		$rootUrl=(is_https()?'https://':'http://').$_SERVER['SERVER_NAME'].'/index.php';
-		if(Config::get('url.pathinfo')){
-			return $rootUrl.'/'.$arr[0].'/'.$arr[1].'/'.$arr[2];
-		}else{
-			return $rootUrl.'?m='.$arr[0].'&c='.$arr[1].'&a='.$arr[2];
-		}	
-    }
+		$rootUrl = (is_https() ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/index.php';
+		if (Config::get('url.pathinfo')) {
+			return $rootUrl . '/' . $arr[0] . '/' . $arr[1] . '/' . $arr[2];
+		} else {
+			return $rootUrl . '?m=' . $arr[0] . '&c=' . $arr[1] . '&a=' . $arr[2];
+		}
+	}
 }
