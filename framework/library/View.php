@@ -37,37 +37,41 @@ class View
         $newContent = $content;
         preg_match_all('/{(.*)}/U', $content, $matches);
         foreach ($matches[0] as $k => $match) {
+            $str ='{'. $matches[1][$k] .'}';//原样输出
             $flag = substr($match, 1, 1);
             switch ($flag) {
                 case '$':
                     $str = '<?php echo ' . $matches[1][$k] . ';?>';
                     break;
                 case 'l':
-                    $arr = explode(' ', $matches[1][$k]);
-                    $arrLength = count($arr);
-                    if ($arrLength == 3) {
-                        $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . ' ){?>';
+                    if(substr($match, 1, 4)=='loop'){
+                        $arr = explode(' ', $matches[1][$k]);
+                        $arrLength = count($arr);
+                        if ($arrLength == 3) {
+                            $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . ' ){?>';
+                        }
+                        if ($arrLength == 4) {
+                            $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . '=>' . $arr[2] . ' ){?>';
+                        }  
                     }
-                    if ($arrLength == 4) {
-                        $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . '=>' . $arr[2] . ' ){?>';
-                    }
-                    break;
+                    break;   
                 case 'i':
-                    $str = '<?php ' . $matches[1][$k] . ' {?>';
+                    if(substr($match, 1, 2)=='if'){
+                        $str = '<?php ' . $matches[1][$k] . ' {?>';
+                    }
                     break;
                 case 'e':
-                    $str = '<?php } ' . $matches[1][$k] . ' {?>';
+                    if(substr($match, 1, 4)=='else'){
+                         $str = '<?php } ' . $matches[1][$k] . ' {?>';
+                    }
                     break;
                 case '/':
                     $str = '<?php } ?>';
                     break;
                 default:
-                    if(has_str($matches[1][$k],'(')&&has_str($matches[1][$k],')')){
-                        //解析php函数,如{count($array)}
+                    if(substr_count($matches[1][$k], '(')==1&&substr_count($matches[1][$k], ')')==1){
+                        //解析是否是php函数,如{count($array)}
                         $str = '<?php echo ' . $matches[1][$k] . ';?>';
-                    }else{
-                        //如果不是php函数则原样输出
-                        $str ='{'. $matches[1][$k] .'}';
                     }
                     break;
             }
