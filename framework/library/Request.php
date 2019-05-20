@@ -56,7 +56,7 @@ class Request
         if (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
             $this->method = strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
         } else {
-            $this->method = $this->server('REQUEST_METHOD') ?: 'GET';
+            $this->method = $_SERVER['REQUEST_METHOD'] ?: 'GET';
         }
         return $this->method;
     }
