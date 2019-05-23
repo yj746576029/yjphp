@@ -84,14 +84,14 @@ abstract class Model
         foreach ($data as $k => $v) {
             $column .= $i == 0 ? $k : ',' . $k;
             $value .= $i == 0 ? ':' . $k : ',:' . $k;
-            $this->bindValue[':' . $k] = $v;
+            $this->db->bindValue[':' . $k] = $v;
             ++$i;
         }
         $column .= ' ) ';
         $value .= ' ) ';
-        $sql = 'INSERT INTO ' . $this->tableName . $column . ' VALUES' . $value;
+        $sql = 'INSERT INTO ' . $this->db->tableName . $column . ' VALUES' . $value;
         $this->rowCount = $this->db->query($sql, $this->db->bindValue)->rowCount();
-        $this->insertId = $this->db->lastInsertId();
+        $this->insertId = $this->db->insertId;
         return  $this->rowCount != null ? true : false;
     }
 
