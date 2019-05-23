@@ -69,7 +69,7 @@ abstract class Model
      */
     public function fetchAll()
     {
-        $sql = 'SELECT ' . $this->db->field . ' FROM ' . $this->db->tableName . $this->join . $this->db->where . $this->db->order;
+        $sql = 'SELECT ' . $this->db->field . ' FROM ' . $this->db->tableName . $this->db->join . $this->db->where . $this->db->order;
         return $this->db->query($sql, $this->db->bindValue)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
