@@ -51,7 +51,7 @@ class View
                             $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . ' ){?>';
                         }
                         if ($arrLength == 4) {
-                            $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . '=>' . $arr[2] . ' ){?>';
+                            $str = '<?php foreach( ' . $arr[1] . ' as ' . $arr[2] . '=>' . $arr[3] . ' ){?>';
                         }  
                     }
                     break;   

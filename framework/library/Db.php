@@ -57,6 +57,7 @@ class Db
      */
     public static function connect()
     {
+        
         if (!self::$instance instanceof self) {
             self::$instance = new self();
         }
@@ -266,6 +267,15 @@ class Db
     {
         $statement = $this->con->prepare($sql); //采用预处理，防止sql注入
         $statement->execute($bind);
+        //清空查询构造数据
+        $this->field = '*'; //查询字段
+        $this->join = ''; //表连接
+        $this->where = ''; //条件
+        $this->order = ''; //排序
+        $this->limit = ''; //记录限定
+        $this->bindValue = []; //参数绑定
+        $this->rowCount = null; //影响的行数
+        $this->insertId = null; //插入数据的id
         return $statement;
     }
 }
