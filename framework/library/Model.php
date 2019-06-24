@@ -20,6 +20,15 @@ abstract class Model
     }
 
     /**
+     * 表名
+     */
+    public function table($tableName)
+    {
+        $this->db->table($tableName);
+        return $this;
+    }
+
+    /**
      * where 条件构造
      */
     public function where(array $where = [])

@@ -172,13 +172,16 @@ class Db
      */
     public function join($tableName, $on, $type = 'inner')
     {
+        $prefix = Config::get('database.prefix');
         $t = strtoupper($type);
         $onArr = explode(',', $on);
+        $onArr0 = explode('.',  $onArr[0]);
+        $onArr1 = explode('.',  $onArr[1]);
         if (has_str($tableName, ' ')) {
             $tableNameArr = explode(' ', $tableName);
-            $this->join .= ' ' . $t . ' JOIN ' . $tableNameArr[0] . ' AS ' . $tableNameArr[1] . ' ON ' . $onArr[0] . ' = ' . $onArr[1];
+            $this->join .= ' ' . $t . ' JOIN `' . $prefix . $tableNameArr[0] . '` AS `' . $tableNameArr[1] . '` ON `' . $onArr0[0] . '`.`' . $onArr0[1] . '` = `' . $onArr1[0] . '`.`' . $onArr1[1] . '`';
         } else {
-            $this->join .= ' ' . $t . ' JOIN ' . $tableName . ' ON ' . $onArr[0] . ' = ' . $onArr[1];
+            $this->join .= ' ' . $t . ' JOIN `' . $prefix . $tableName . '` ON `' . $prefix . $onArr0[0] . '`.`' . $onArr0[1] . '` = `' . $prefix . $onArr1[0] . '`.`' . $onArr1[1] . '`';
         }
         return $this;
     }
