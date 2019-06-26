@@ -6,6 +6,10 @@ abstract class Model
 {
 
     protected $db = null;  //数据库连接对象
+    
+    public $rowCount = null; //影响的行数
+
+    public $insertId = null; //插入数据的id
 
     public function __construct()
     {
