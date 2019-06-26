@@ -77,10 +77,6 @@ class View
             }
             $newContent = str_replace($match, $str, $newContent);
         }
-        /* 去除html空格与换行 */
-        $find    = ['~>\s+<~', '~>(\s+\n|\r)~'];
-        $replace = ['><', '>'];
-        $newContent = preg_replace($find, $replace, $newContent);
         // 优化生成的php代码
         $newContent = preg_replace('/\?>\s*<\?php\s(?!echo\b)/s', '', $newContent);
         return $newContent;
