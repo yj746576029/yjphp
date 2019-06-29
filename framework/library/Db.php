@@ -57,7 +57,7 @@ class Db
      */
     public static function connect()
     {
-        
+
         if (!self::$instance instanceof self) {
             self::$instance = new self();
         }
@@ -163,7 +163,26 @@ class Db
      */
     public function field($field)
     {
-        $this->field = $field;
+        $this->field='';
+        if (has_str($field, '.')) {
+            $arr = explode(',', $field);
+            $arrLength = count($arr);
+            foreach ($arr as $k => $v) {
+                $arrV = explode('.', $v);
+                $this->field .= '`' . trim($arrV[0]) . '`.';
+                if (has_str($arrV[1], ' as ') || has_str($arrV[1], ' AS ') || has_str($arrV[1], ' As ') || has_str($arrV[1], ' aS ')) { 
+                    $arrV1= explode(' ', $arrV[1]);
+                    $this->field .='`'.$arrV1[0].'` AS `'.$arrV1[2].'`';
+                }else{
+                    $this->field .= trim($arrV[1]) == '*' ? trim($arrV[1]) : '`' . trim($arrV[1]) . '`';
+                }
+                if ($k + 1 < $arrLength) {
+                    $this->field .= ',';
+                }
+            }
+        } else {
+            $this->field = $field;
+        }
         return $this;
     }
 
