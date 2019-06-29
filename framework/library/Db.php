@@ -277,8 +277,6 @@ class Db
         $this->order = ''; //排序
         $this->limit = ''; //记录限定
         $this->bindValue = []; //参数绑定
-        $this->rowCount = null; //影响的行数
-        $this->insertId = null; //插入数据的id
         return $statement;
     }
 }
