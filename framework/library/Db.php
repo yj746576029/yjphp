@@ -9,7 +9,7 @@ class Db
 
     private $con = null; //数据库的连接
 
-    public $tableName; //表名
+    public $tableName = ''; //表名
 
     public $field = '*'; //查询字段
 
@@ -24,8 +24,6 @@ class Db
     public $bindValue = []; //参数绑定
 
     public $rowCount = null; //影响的行数
-
-    public $insertId = null; //插入数据的id
 
     /**
      * Db 构造方法
@@ -251,7 +249,6 @@ class Db
         $value .= ' ) ';
         $sql = 'INSERT INTO ' . $this->tableName . $column . ' VALUES' . $value;
         $this->rowCount = $this->query($sql, $this->bindValue)->rowCount();
-        $this->insertId = $this->con->lastInsertId();
         return  $this->rowCount != null ? true : false;
     }
 
@@ -289,13 +286,27 @@ class Db
     {
         $statement = $this->con->prepare($sql); //采用预处理，防止sql注入
         $statement->execute($bind);
-        //清空查询构造数据
+        $this->clearPar();
+        return $statement;
+    }
+
+    /**
+     * 返回最后插入行的ID或序列值
+     */
+    public function lastInsertId(){
+        return $this->con->lastInsertId();
+    }
+
+    /**
+     * 清空查询构造数据
+     */
+    private function clearPar(){
+        $this->tableName = ''; //表名
         $this->field = '*'; //查询字段
         $this->join = ''; //表连接
         $this->where = ''; //条件
         $this->order = ''; //排序
         $this->limit = ''; //记录限定
         $this->bindValue = []; //参数绑定
-        return $statement;
     }
 }
