@@ -25,13 +25,20 @@ abstract class Model
 
     public function __construct()
     {
+        $this->db = Db::connect(); //连接数据库
+        $this->autoSetTableName();
+    }
+
+    /**
+     * 自动设置表名（取子类名）
+     */
+    private function autoSetTableName(){
         // static::class 也可用get_called_class()
         // 把子类名转化成表名
         $str = strrchr(static::class, '\\');
         $str = str_replace('\\', '', $str);
         $str = str_replace('Model', '', $str);
         $tableName = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $str));
-        $this->db = Db::connect(); //连接数据库
         $prefix = Config::get('database.prefix');
         $this->tableName = '`' . $prefix . $tableName . '`'; //自动设置表名
     }
@@ -275,6 +282,7 @@ abstract class Model
      */
     private function clearPar()
     {
+        $this->autoSetTableName();
         $this->field = '*'; //查询字段
         $this->join = ''; //表连接
         $this->where = ''; //条件
